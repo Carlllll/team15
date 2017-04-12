@@ -30,12 +30,17 @@ public class RiotApiController {
     private static final int teamId = 15;
 
     @RequestMapping(value = "/calc --data_urlenconde '{equation}'", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Summoner querySummoner(@PathVariable("equation") String equation) throws UnsupportedEncodingException {
+    public String querySummoner(@PathVariable("equation") String equation) throws UnsupportedEncodingException {
+    	final String url = "http://52.79.162.52:8080/api/v1/answer";
     	Calculator calc = new Calculator();
 		double result = calc.calculate(equation);
 		long now = System.currentTimeMillis(); 
-	
+		
+		
+		
     	Summoner summoner = new Summoner(equation, teamId, now, result);
-        return summoner;
+    	String response = restTemplate.postForObject(url, summoner, String.class);
+    	
+    	return response;
     }
 }
